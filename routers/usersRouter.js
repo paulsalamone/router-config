@@ -3,11 +3,11 @@ const pool = require("../config");
 const { body, validationResult } = require("express-validator");
 
 const checkUser = require("../middlewares/checkUser");
-//const Validator = require("../middlewares/Validator");
+// const Validator = require("../middlewares/Validator");
 
 const Validator = [
-  body("first_name").isLength({ min: 1, max: 50 }).isString() &&
-    body("last_name").isLength({ min: 1, max: 50 }).isString(),
+  body("first_name").isLength({ min: 1, max: 50 }).isString().isAlpha() &&
+    body("last_name").isLength({ min: 1, max: 50 }).isString().isAlpha(),
 ];
 
 usersRouter.get("/", (req, res) => {
@@ -19,7 +19,6 @@ usersRouter.get("/", (req, res) => {
 
 usersRouter.get("/:id", checkUser, (req, res) => {
   const { id } = req.params;
-
   pool
     .query(`SELECT * FROM users WHERE id= $1;`, [id])
     .then((data) => res.json(data.rows))
