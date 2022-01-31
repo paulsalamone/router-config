@@ -6,8 +6,8 @@ const checkUser = require("../middlewares/checkUser");
 // const Validator = require("../middlewares/Validator");
 
 const Validator = [
-  body("first_name").isLength({ min: 1, max: 50 }).isString().isAlpha() &&
-    body("last_name").isLength({ min: 1, max: 50 }).isString().isAlpha(),
+  body("first_name").isLength({ min: 1, max: 50 }).isString().isAlpha(),
+  body("last_name").isLength({ min: 1, max: 50 }).isString().isAlpha(),
 ];
 
 usersRouter.get("/", (req, res) => {
