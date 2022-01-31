@@ -3,7 +3,12 @@ const pool = require("../config");
 const { body, validationResult } = require("express-validator");
 
 const checkUser = require("../middlewares/checkUser");
-const Validator = require("../middlewares/Validator");
+//const Validator = require("../middlewares/Validator");
+
+const Validator = [
+  body("first_name").isLength({ min: 1, max: 50 }).isString() &&
+    body("last_name").isLength({ min: 1, max: 50 }).isString(),
+];
 
 usersRouter.get("/", (req, res) => {
   pool
@@ -25,13 +30,11 @@ usersRouter.get("/:id", checkUser, (req, res) => {
 
 usersRouter.post("/", Validator, (req, res) => {
   const errors = validationResult(req);
-
   if (!errors.isEmpty()) {
     return res.sendStatus(400).json({ errors: errors.array() });
   }
 
   const { first_name, last_name } = req.body;
-
   pool
     .query(
       "INSERT INTO users(first_name, last_name) VALUES($1, $2) RETURNING *",
@@ -64,7 +67,7 @@ usersRouter.put("/:id", checkUser, Validator, (req, res) => {
 usersRouter.delete("/:id", checkUser, (req, res) => {
   const { id } = req.params;
   pool
-    .query("DELETE FROM users WHERE id = $1", [id])
+    .query("DELETE FROM users WHERE id = $1 RETURNING *", [id])
     .then((data) => res.json(data))
     .catch((e) => res.sendStatus(500));
 });
