@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const port = process.env.PGPORT || 3002;
+const port = process.env.PG_PORT || 3002;
 
 app.use(express.json());
 app.use(
@@ -11,8 +11,8 @@ app.use(
 
 require("dotenv").config();
 
-const usersRouter = require("./routes/usersRouter");
+const usersRouter = require("./routers/usersRouter");
 
-app.use("/api/usersRouter", usersRouter);
+app.use("/api/users", usersRouter);
 
 app.listen(port, console.log(`Server is listening on port ${port}`));
